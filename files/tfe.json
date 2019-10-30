@@ -1,0 +1,75 @@
+{
+    "aws_access_key_id": {},
+    "aws_instance_profile": {
+        "value": "0"
+    },
+    "aws_secret_access_key": {},
+    "azure_account_key": {},
+    "azure_account_name": {},
+    "azure_container": {},
+    "azure_endpoint": {},
+    "ca_certs": {
+        "value": "-----BEGIN RSA PRIVATE KEY-----\nMIIEpAIBAAKCAQEA4JTd1tLOr/KiKwLfARqnCPk3hH0YL409glXZBA7qZzGt22FT\nLmryry9ErBPAH4vLvoRH9mQ7dBVcCgOaOO9bnYvYIzgmv+HhNRxmY+1OgUXgWrv+\nlgUCSLf+OS2GXoUwc9tzlE+FPdjMxDUc58L1WsSros+JLQBNULfQAHbHmaNZ30eV\nvisfoDuf/UjI0m1AveaFGInINpfXnqp436qjwaRCt/hGtXXf/anrvY5OtppptFMi\nFGG9hc4tFKwQJzwJGcnwYR1adIyykOWJi7VsThQYwlefuD8vf9J9qxMq9Jvs9Ip/\nl6wVhpzvXA7e1BHm3wuv1kHcxnBedOxnAeuxQwIDAQABAoIBAQCpKBfr3j7mEhiJ\n0xDLkRqtTKG/fkXAU184E5dxUhbGgYnVSvpPZSjEQRM1lW7JlA9zwck+UgLiDdCU\njmAUcF2OTi4PYRT2xJlP2sNYkv7lqg8x6JX6w20T/tpSkPK7sRBsw6fL1xWiHvEk\n/Gh4PMV3h9lLuYw2RBr4KGtYXh87nYA3VcSBScatriFzdvNyoN2JavcVcQv6rEbp\nhTLCZ0ujzI1/bT7pC/i/8WUq0KKQ7xh7pUT1/cxFo6BlaxNBecnAf5ld7HOOw4Wm\ng1VFJ17nckj5rKghvSKoPfqHUKN5tH/pB5N1aRoF3ibT6JSfjHEIm4PDjn7RMQBn\ne3XR59sZAoGBAO9LNSmSPsTZAA/wtqXrD4KSJD5E1onl4QXOTUnJL3ObYC53xxx4\n36WKWLXkf9DcV90hlI92BJBYx8RzTjqzioElxx+wMzQG7Wr28luO7ki3/E2NqnPe\nrOBMLw3ZjXu8sJ93IcYEEojqGCS6WtR6jluD9n/nyn2/ISkTZOAkzEN/AoGBAPBC\ntoVhenVSyR75YAdrdtJj0/1b5WVOPTKw1lmPAVSsqsmmNBFDo/eficDlTUxSmWs3\nvugcELDhCgyVIVG5DpQPp/dgXugkc5W8Cb17xBA48zwnRbnKY/hEAe7xbRE3w4G8\nnpxftdOf2jp6tQSRB8fsdLJ5k3ui9GcLo252HmQ9AoGAKXp/3JTdDIIQ4LJ49omo\nRpnObnzAM2cFelwoSYH2F7P3GBbrDKRnH+q7NcxF245WLJ6FgdiTMfIxrnvOM56r\ng3do7LU+KuaIgOINYJGF/FToBwlnYm5WyQprnZr4S1qJwxqDYC+UhucNCFDFLc+Q\nnYxiTgl/sAxRUy1pbvDx90ECgYAsYJYn8sZUr1LYtsUG+dF7sNayIGwxlw70svcU\nmbZsNmxhTKKnYbACh+RAzdnGNCeER0qqwqxOj3J0uoLp/l1z+aRTq+g7xqfWy2Gd\nLyQavvombTaSx5BJhf45bTxxBrTE3NsLFR6XlRoQ3SNcUZF3WvR/FreoCYRNGDg6\nqfSZHQKBgQCUgzkrx7KTs+86NBF6wfQeTyHYNnaW20GV+iLQmmbBQVyRHsvKkQZc\n22PrzkaCrXE75R5lNCMi4J9xHljSGBX1nIi7laZ3nq0lHSSZ1G3zdm23Hih6jpyP\n3cfdht9+s4XQoWefGvllE2sHt66z/h3hrAk5yFQYLlj/HVRZukaZDQ==\n-----END RSA PRIVATE KEY-----\n-----BEGIN CERTIFICATE-----\nMIIFYTCCBEmgAwIBAgISAxToh1XaxfV1fp+AnqH0cXElMA0GCSqGSIb3DQEBCwUA\nMEoxCzAJBgNVBAYTAlVTMRYwFAYDVQQKEw1MZXQncyBFbmNyeXB0MSMwIQYDVQQD\nExpMZXQncyBFbmNyeXB0IEF1dGhvcml0eSBYMzAeFw0xOTEwMzAwNDE2NDFaFw0y\nMDAxMjgwNDE2NDFaMCAxHjAcBgNVBAMTFXRmZS5oYXNoaWNvcnBsYWJzLmNvbTCC\nASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAOCU3dbSzq/yoisC3wEapwj5\nN4R9GC+NPYJV2QQO6mcxrdthUy5q8q8vRKwTwB+Ly76ER/ZkO3QVXAoDmjjvW52L\n2CM4Jr/h4TUcZmPtToFF4Fq7/pYFAki3/jkthl6FMHPbc5RPhT3YzMQ1HOfC9VrE\nq6LPiS0ATVC30AB2x5mjWd9Hlb4rH6A7n/1IyNJtQL3mhRiJyDaX156qeN+qo8Gk\nQrf4RrV13/2p672OTraaabRTIhRhvYXOLRSsECc8CRnJ8GEdWnSMspDliYu1bE4U\nGMJXn7g/L3/SfasTKvSb7PSKf5esFYac71wO3tQR5t8Lr9ZB3MZwXnTsZwHrsUMC\nAwEAAaOCAmkwggJlMA4GA1UdDwEB/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcD\nAQYIKwYBBQUHAwIwDAYDVR0TAQH/BAIwADAdBgNVHQ4EFgQUM5IGhCVoTL/DIdY3\nKvHBZAMI7MIwHwYDVR0jBBgwFoAUqEpqYwR93brm0Tm3pkVl7/Oo7KEwbwYIKwYB\nBQUHAQEEYzBhMC4GCCsGAQUFBzABhiJodHRwOi8vb2NzcC5pbnQteDMubGV0c2Vu\nY3J5cHQub3JnMC8GCCsGAQUFBzAChiNodHRwOi8vY2VydC5pbnQteDMubGV0c2Vu\nY3J5cHQub3JnLzAgBgNVHREEGTAXghV0ZmUuaGFzaGljb3JwbGFicy5jb20wTAYD\nVR0gBEUwQzAIBgZngQwBAgEwNwYLKwYBBAGC3xMBAQEwKDAmBggrBgEFBQcCARYa\naHR0cDovL2Nwcy5sZXRzZW5jcnlwdC5vcmcwggEDBgorBgEEAdZ5AgQCBIH0BIHx\nAO8AdgCyHgXMi6LNiiBOh2b5K7mKJSBna9r6cOeySVMt74uQXgAAAW4bGDXnAAAE\nAwBHMEUCIQDQPQAsRvwTXh2TomLyINNN/Jf1BD4DUHXeCzVnsR462AIgDECXkLYG\nv9dUbqxRIf6Kh5BEsViYu49/+nlRo2xclZ8AdQBvU3asMfAxGdiZAKRRFf93FRwR\n2QLBACkGjbIImjfZEwAAAW4bGDZXAAAEAwBGMEQCIAUqlNAs2+wtylvaOw101OHV\niaY+RQCBbbxJilTp0Wd9AiA/IUFpBRXaoQOd9opGllYo4e22MhsVJxeMkIardk6j\n8TANBgkqhkiG9w0BAQsFAAOCAQEAf5NimSG3LHy39m+T31s/Ju5SI79soc6SHXI5\nteRxUuDj1jKYtiYC1X799nFF5NlhXPOTWXWkX/LjljI5ODmwVr7oKPjH/qf7xu5v\nPoLxB+SptlU0zrrL4iyElJ+pzECBkzx92IMvkmxGwocpseewDt9BLTHIRZXy/ZwM\n94ZD1kmMjwW6rOSbYeEdEy4qbkUCTlHlZ88kgS7M9IG06gIX0N8E3W3KJO36GQWz\nlKdviRBT8VWMzaK+nbF7bca49z9cGpnFa8QTSp/5fmP4qb1ZhqC/MD195p1Yp6y0\nl+sMY+5qKXBx9OKLst+taZsI5OOyrO3B+IJbyxXSC9RV9rMRdw==\n-----END CERTIFICATE-----\n"
+    },
+    "capacity_concurrency": {
+        "value": "10"
+    },
+    "capacity_memory": {
+        "value": "512"
+    },
+    "custom_image_tag": {
+        "value": "hashicorp/build-worker:now"
+    },
+    "disk_path": {},
+    "enable_metrics_collection": {
+        "value": "0"
+    },
+    "enc_password": {
+        "value": "M8GxrAuLMMXvLrniSkJwhTFy3XMNv54K"
+    },
+    "extern_vault_addr": {},
+    "extern_vault_enable": {
+        "value": "0"
+    },
+    "extern_vault_path": {},
+    "extern_vault_propagate": {},
+    "extern_vault_role_id": {},
+    "extern_vault_secret_id": {},
+    "extern_vault_token_renew": {},
+    "extra_no_proxy": {},
+    "gcs_bucket": {},
+    "gcs_credentials": {
+        "value": "{}"
+    },
+    "gcs_project": {},
+    "hostname": {
+        "value": "tfe.hashicorplabs.com"
+    },
+    "iact_subnet_list": {},
+    "iact_subnet_time_limit": {
+        "value": "60"
+    },
+    "installation_type": {
+        "value": "poc"
+    },
+    "pg_dbname": {},
+    "pg_extra_params": {},
+    "pg_netloc": {},
+    "pg_password": {},
+    "pg_user": {},
+    "placement": {
+        "value": "placement_s3"
+    },
+    "production_type": {},
+    "s3_bucket": {},
+    "s3_endpoint": {},
+    "s3_region": {},
+    "s3_sse": {},
+    "s3_sse_kms_key_id": {},
+    "tbw_image": {
+        "value": "default_image"
+    },
+    "tls_vers": {
+        "value": "tls_1_2_tls_1_3"
+    }
+}
