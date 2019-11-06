@@ -30,7 +30,11 @@ Vagrant.configure(2) do |config|
         tfe.vm.box = "bento/ubuntu-18.04"
         tfe.vm.network "private_network", ip: "10.10.0.2"
         tfe.vm.hostname = "tfe1"
+        tfe.vm.provision "file", source: "files/.", destination: "/tmp"
+        tfe.vm.provision "shell", inline: "mv /tmp/replicated.conf /etc/replicated.conf"
+        tfe.vm.provision "shell", inline: "chmod 644 /etc/replicated.conf"
         tfe.vm.provision "docker"
+        tfe.vm.provision "shell", inline: $script
         tfe.vm.provision "shell", inline: "docker run --detach \
                                                       --hostname gitlab.example.com \
                                                       --publish 8443:443 --publish 8080:80 --publish 8222:22 \
@@ -41,10 +45,8 @@ Vagrant.configure(2) do |config|
                                                       --volume /srv/gitlab/data:/var/opt/gitlab \
                                                       --env GITLAB_OMNIBUS_CONFIG=\"external_url 'https://gitlab.hashicorplabs.com'; letsencrypt['enabled'] = false\" \
                                                         gitlab/gitlab-ce:latest"
-        tfe.vm.provision "file", source: "files/.", destination: "/tmp"
-        tfe.vm.provision "shell", inline: "mv /tmp/replicated.conf /etc/replicated.conf"
-        tfe.vm.provision "shell", inline: "chmod 644 /etc/replicated.conf"
-        tfe.vm.provision "shell", inline: $script
+        tfe.vm.provision "shell", inline: "echo 'Please browse to https://10.10.0.2:8800 to track the installation progress of TFE. The console password is Hashicorp1!'"
+        tfe.vm.provision "shell", inline: "echo 'Gitlab is also starting up, and will be accessible at https://10.10.0.2:8443 shortly.'"
     end
 end
 
