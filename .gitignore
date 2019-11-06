@@ -1,0 +1,6 @@
+files/license.rli
+*.tfstate*
+*.tfvars
+.vagrant
+custom_cert/.terraform
+packer
