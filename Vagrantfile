@@ -17,7 +17,7 @@ consul_home = "/srv/consul"
 
 # Vault variables
 
-vault_ip = ENV['VAULT_IP'] || "10.10.0.3"
+vault_ip = ENV['VAULT_IP'] || "10.10.0.4"
 vault_host_port = ENV['VAULT_HOST_PORT'] || 8200
 vault_version = ENV['VAULT_VERSION'] || "1.3.0-beta1+ent"
 vault_ent_url = ENV['VAULT_ENT_URL']
