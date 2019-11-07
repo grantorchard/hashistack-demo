@@ -103,7 +103,7 @@ Vagrant.configure(2) do |config|
     end
 
     # TFE
-    config.vm.define "tfe2" do |tfe|
+    config.vm.define "tfe2" do |tfe2|
     tfe2.vm.provider "virtualbox" do |vb|
         vb.memory = "2048"
         vb.cpus = "2"
@@ -149,7 +149,7 @@ Vagrant.configure(2) do |config|
             "COMMENT" => consul_comment,
             "HOME" => consul_home,
             }
-        vaultnode1.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/consul/scripts/install-consul.sh | bash",
+        vaultnode1.vm.provision "shell", inline: "curl https://raxw.githubusercontent.com/hashicorp/guides-configuration/master/consul/scripts/install-consul.sh | bash",
             env: {
             "VERSION" => consul_version,
             "URL" => consul_ent_url,
