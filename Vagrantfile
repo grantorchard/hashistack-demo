@@ -16,8 +16,8 @@ consul_comment = "Consul"
 consul_home = "/srv/consul"
 
 # Vault variables
-vault_ip = ENV['VAULT_IP'] || "10.10.0.4"
-vaultnode2_ip = ENV['VAULT_IP'] || "10.10.0.5"
+
+vault_ip = ENV['VAULT_IP'] || "10.10.0.3"
 vault_host_port = ENV['VAULT_HOST_PORT'] || 8200
 vault_version = ENV['VAULT_VERSION'] || "1.3.0-beta1+ent"
 vault_ent_url = ENV['VAULT_ENT_URL']
@@ -118,46 +118,46 @@ Vagrant.configure(2) do |config|
     end
 
     #Vault
-    config.vm.define "vaultnode1" do |vaultnode1|
-        vaultnode1.vm.box = "bento/ubuntu-18.04"
-        vaultnode1.vm.network "private_network", ip: vault_ip
-        vaultnode1.vm.hostname = "vaultnode-01"
-        vaultnode1.vm.provision "shell", inline: "sudo apt -y install unzip"
-        vaultnode1.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/shared/scripts/base.sh | bash"
-        vaultnode1.vm.network :forwarded_port, guest: 8200, host: vault_host_port, auto_correct: true
-        vaultnode1.vm.network :forwarded_port, guest: 8500, host: consul_host_port, auto_correct: true
-        vaultnode1.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/shared/scripts/setup-user.sh | bash",
+    config.vm.define "vault" do |vault|
+        vault.vm.box = "bento/ubuntu-18.04"
+        vault.vm.network "private_network", ip: vault_ip
+        vault.vm.hostname = "vaultnode-01"
+        vault.vm.provision "shell", inline: "sudo apt -y install unzip"
+        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/shared/scripts/base.sh | bash"
+        vault.vm.network :forwarded_port, guest: 8200, host: vault_host_port, auto_correct: true
+        vault.vm.network :forwarded_port, guest: 8500, host: consul_host_port, auto_correct: true
+        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/shared/scripts/setup-user.sh | bash",
             env: {
             "GROUP" => consul_group,
             "USER" => consul_user,
             "COMMENT" => consul_comment,
             "HOME" => consul_home,
             }
-        vaultnode1.vm.provision "shell", inline: "curl https://raxw.githubusercontent.com/hashicorp/guides-configuration/master/consul/scripts/install-consul.sh | bash",
+        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/consul/scripts/install-consul.sh | bash",
             env: {
             "VERSION" => consul_version,
             "URL" => consul_ent_url,
             "USER" => consul_user,
             "GROUP" => consul_group,
             }        
-        vaultnode1.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/consul/scripts/install-consul-systemd.sh | bash"   
-        vaultnode1.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/shared/scripts/setup-user.sh | bash",
+        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/consul/scripts/install-consul-systemd.sh | bash"   
+        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/shared/scripts/setup-user.sh | bash",
             env: {
                 "GROUP" => vault_group,
                 "USER" => vault_user,
                 "COMMENT" => vault_comment,
                 "HOME" => vault_home,
             }
-        vaultnode1.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/vault/scripts/install-vault.sh | bash",
+        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/vault/scripts/install-vault.sh | bash",
             env: {
                 "VERSION" => vault_version,
                 "URL" => vault_ent_url,
                 "USER" => vault_user,
                 "GROUP" => vault_group,
             }
-        vaultnode1.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/vault/scripts/install-vault-systemd.sh | bash"
-        vaultnode1.vm.provision "shell", inline: "sudo snap install ngrok"
-        vaultnode1.vm.post_up_message = "
+        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/vault/scripts/install-vault-systemd.sh | bash"
+        vault.vm.provision "shell", inline: "sudo snap install ngrok"
+        vault.vm.post_up_message = "
             Your Vault dev cluster has been successfully provisioned!
             To SSH into a Vault host, run the below command.
               $ vagrant ssh
@@ -174,68 +174,6 @@ Vagrant.configure(2) do |config|
               $ curl -H \"X-Vault-Token: $VAULT_TOKEN\" -X POST -d '{\"data\": {\"bar\":\"baz\"}}' http://127.0.0.1:8200/v1/secret/data/api | jq '.'
               $ curl -H \"X-Vault-Token: $VAULT_TOKEN\" http://127.0.0.1:8200/v1/secret/data/api | jq '.'
             Visit the Vault UI: http://#{vault_ip}:#{vault_host_port}
-            Don't forget to tear your VM down after.
-              $ vagrant destroy
-            "
-    end
-
-    #Vault
-    config.vm.define "vaultnode2" do |vaultnode2|
-        vaultnode2.vm.box = "bento/ubuntu-18.04"
-        vaultnode2.vm.network "private_network", ip: vaultnode2_ip
-        vaultnode2.vm.hostname = "vaultnode-02"
-        vaultnode2.vm.provision "shell", inline: "sudo apt -y install unzip"
-        vaultnode2.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/shared/scripts/base.sh | bash"
-        vaultnode2.vm.network :forwarded_port, guest: 8200, host: vault_host_port, auto_correct: true
-        vaultnode2.vm.network :forwarded_port, guest: 8500, host: consul_host_port, auto_correct: true
-        vaultnode2.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/shared/scripts/setup-user.sh | bash",
-            env: {
-            "GROUP" => consul_group,
-            "USER" => consul_user,
-            "COMMENT" => consul_comment,
-            "HOME" => consul_home,
-            }
-        vaultnode2.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/consul/scripts/install-consul.sh | bash",
-            env: {
-            "VERSION" => consul_version,
-            "URL" => consul_ent_url,
-            "USER" => consul_user,
-            "GROUP" => consul_group,
-            }        
-        vaultnode2.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/consul/scripts/install-consul-systemd.sh | bash"   
-        vaultnode2.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/shared/scripts/setup-user.sh | bash",
-            env: {
-                "GROUP" => vault_group,
-                "USER" => vault_user,
-                "COMMENT" => vault_comment,
-                "HOME" => vault_home,
-            }
-        vaultnode2.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/vault/scripts/install-vault.sh | bash",
-            env: {
-                "VERSION" => vault_version,
-                "URL" => vault_ent_url,
-                "USER" => vault_user,
-                "GROUP" => vault_group,
-            }
-        vaultnode2.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/vault/scripts/install-vault-systemd.sh | bash"
-        vaultnode2.vm.provision "shell", inline: "sudo snap install ngrok"
-        vaultnode2.vm.post_up_message = "
-            Your Vault dev cluster has been successfully provisioned!
-            To SSH into a Vault host, run the below command.
-              $ vagrant ssh
-            You can interact with Vault using any of the CLI (https://www.vaultproject.io/docs/commands/index.html)
-            or API (https://www.vaultproject.io/api/index.html) commands.
-              # The Root token for your Vault -dev instance is set to `root` and placed in /srv/vault/.vault-token,
-              # the `VAULT_TOKEN` environment variable has already been set for you
-              $ echo $VAULT_TOKEN
-              $ sudo cat /srv/vault/.vault-token
-              # Use the CLI to write and read a generic secret
-              $ vault kv put secret/cli foo=bar
-              $ vault kv get secret/cli
-              # Use the API to write and read a generic secret
-              $ curl -H \"X-Vault-Token: $VAULT_TOKEN\" -X POST -d '{\"data\": {\"bar\":\"baz\"}}' http://127.0.0.1:8200/v1/secret/data/api | jq '.'
-              $ curl -H \"X-Vault-Token: $VAULT_TOKEN\" http://127.0.0.1:8200/v1/secret/data/api | jq '.'
-            Visit the Vault UI: http://#{vaultnode2_ip}:#{vault_host_port}
             Don't forget to tear your VM down after.
               $ vagrant destroy
             "
