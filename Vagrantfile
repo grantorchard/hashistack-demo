@@ -36,6 +36,15 @@ curl -s https://install.terraform.io/ptfe/stable | bash -s \
     no-docker >> null
 SCRIPT
 
+$scripttfe2  = <<-SCRIPT
+echo "Installing Terraform enterprise. Go make yourself a coffee."
+curl -s https://install.terraform.io/ptfe/stable | bash -s \
+    local-address=10.10.0.3 \
+    public-address=10.10.0.3 \
+    no-proxy \
+    no-docker >> null
+SCRIPT
+
 $ready = <<-READY
 while ! curl -ksfS --connect-timeout 5 https://10.10.0.2/_health_check; do
     echo "Querying health check service..... this may take a while"
@@ -93,35 +102,35 @@ Vagrant.configure(2) do |config|
             Gitlab is also starting up, and will be accessible at https://10.10.0.2:8443 shortly."
     end
 
-       # TFE
-       config.vm.define "tfe" do |tfe|
-        tfe2.vm.provider "virtualbox" do |vb|
-            vb.memory = "4096"
-            vb.cpus = "2"
+    # TFE
+    config.vm.define "tfe2" do |tfe|
+    tfe2.vm.provider "virtualbox" do |vb|
+        vb.memory = "2048"
+        vb.cpus = "2"
         end
         tfe2.vm.box = "bento/ubuntu-18.04"
-        tfe2.vm.network "private_network", ip: tfe_ip
+        tfe2.vm.network "private_network", ip: tfe2_ip
         tfe2.vm.hostname = "tfe2"
         tfe2.vm.provision "file", source: "files/.", destination: "/tmp"
         tfe2.vm.provision "shell", inline: "mv /tmp/replicated.conf /etc/replicated.conf"
         tfe2.vm.provision "shell", inline: "chmod 644 /etc/replicated.conf"
         tfe2.vm.provision "docker"
-        tfe2.vm.provision "shell", inline: $script
-        tfe2.vm.provision "shell", inline: "docker run --detach \
-                                                      --hostname gitlab.example.com \
-                                                      --publish 8443:443 --publish 8080:80 --publish 8222:22 \
-                                                      --name gitlab \
-                                                      --restart always \
-                                                      --volume /srv/gitlab/config:/etc/gitlab \
-                                                      --volume /srv/gitlab/logs:/var/log/gitlab \
-                                                      --volume /srv/gitlab/data:/var/opt/gitlab \
-                                                      --env GITLAB_OMNIBUS_CONFIG=\"external_url 'https://gitlab.hashicorplabs.com'; letsencrypt['enabled'] = false\" \
-                                                        gitlab/gitlab-ce:latest"
+        tfe2.vm.provision "shell", inline: $scripttfe2
+        # tfe2.vm.provision "shell", inline: "docker run --detach \
+        #                                               --hostname gitlab.example.com \
+        #                                               --publish 8443:443 --publish 8080:80 --publish 8222:22 \
+        #                                               --name gitlab \
+        #                                               --restart always \
+        #                                               --volume /srv/gitlab/config:/etc/gitlab \
+        #                                               --volume /srv/gitlab/logs:/var/log/gitlab \
+        #                                               --volume /srv/gitlab/data:/var/opt/gitlab \
+        #                                               --env GITLAB_OMNIBUS_CONFIG=\"external_url 'https://gitlab.hashicorplabs.com'; letsencrypt['enabled'] = false\" \
+        #                                                 gitlab/gitlab-ce:latest"
         tfe2.vm.provision "shell", inline: "sudo snap install ngrok"
         tfe2.vm.post_up_message = "
             Your Terraform Enterprise machine has been successfully provisioned!
-            Please browse to https://#{tfe_ip}:8800 to track the installation progress of TFE. The console password is Hashicorp1!
-            Gitlab is also starting up, and will be accessible at https://10.10.0.2:8443 shortly."
+            Please browse to https://#{tfe2_ip}:8800 to track the installation progress of TFE. The console password is Hashi1!
+            Gitlab is also starting up, and will be accessible at https://#{tfe_ip}:8443 shortly."
     end
 
     #Vault
