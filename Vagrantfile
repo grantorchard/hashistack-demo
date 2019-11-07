@@ -3,7 +3,7 @@
 
 # Terraform Enterprise Variables
 tfe_ip = ENV['TFE_IP'] || "10.10.0.2"
-tfe_ip = ENV['TFE_IP'] || "10.10.0.5"
+tfe2_ip = ENV['TFE_IP'] || "10.10.0.3"
 
 
 # Consul variables
