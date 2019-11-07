@@ -3,6 +3,8 @@
 
 # Terraform Enterprise Variables
 tfe_ip = ENV['TFE_IP'] || "10.10.0.2"
+tfe_ip = ENV['TFE_IP'] || "10.10.0.5"
+
 
 # Consul variables
 consul_host_port = ENV['CONSUL_HOST_PORT'] || 8500
@@ -14,8 +16,8 @@ consul_comment = "Consul"
 consul_home = "/srv/consul"
 
 # Vault variables
-vault_ip = ENV['VAULT_IP'] || "10.10.0.3"
-vaultnode2_ip = ENV['VAULT_IP'] || "10.10.0.4"
+vault_ip = ENV['VAULT_IP'] || "10.10.0.4"
+vaultnode2_ip = ENV['VAULT_IP'] || "10.10.0.5"
 vault_host_port = ENV['VAULT_HOST_PORT'] || 8200
 vault_version = ENV['VAULT_VERSION'] || "1.3.0-beta1+ent"
 vault_ent_url = ENV['VAULT_ENT_URL']
@@ -86,6 +88,37 @@ Vagrant.configure(2) do |config|
                                                         gitlab/gitlab-ce:latest"
         tfe.vm.provision "shell", inline: "sudo snap install ngrok"
         tfe.vm.post_up_message = "
+            Your Terraform Enterprise machine has been successfully provisioned!
+            Please browse to https://#{tfe_ip}:8800 to track the installation progress of TFE. The console password is Hashicorp1!
+            Gitlab is also starting up, and will be accessible at https://10.10.0.2:8443 shortly."
+    end
+
+       # TFE
+       config.vm.define "tfe" do |tfe|
+        tfe2.vm.provider "virtualbox" do |vb|
+            vb.memory = "4096"
+            vb.cpus = "2"
+        end
+        tfe2.vm.box = "bento/ubuntu-18.04"
+        tfe2.vm.network "private_network", ip: tfe_ip
+        tfe2.vm.hostname = "tfe2"
+        tfe2.vm.provision "file", source: "files/.", destination: "/tmp"
+        tfe2.vm.provision "shell", inline: "mv /tmp/replicated.conf /etc/replicated.conf"
+        tfe2.vm.provision "shell", inline: "chmod 644 /etc/replicated.conf"
+        tfe2.vm.provision "docker"
+        tfe2.vm.provision "shell", inline: $script
+        tfe2.vm.provision "shell", inline: "docker run --detach \
+                                                      --hostname gitlab.example.com \
+                                                      --publish 8443:443 --publish 8080:80 --publish 8222:22 \
+                                                      --name gitlab \
+                                                      --restart always \
+                                                      --volume /srv/gitlab/config:/etc/gitlab \
+                                                      --volume /srv/gitlab/logs:/var/log/gitlab \
+                                                      --volume /srv/gitlab/data:/var/opt/gitlab \
+                                                      --env GITLAB_OMNIBUS_CONFIG=\"external_url 'https://gitlab.hashicorplabs.com'; letsencrypt['enabled'] = false\" \
+                                                        gitlab/gitlab-ce:latest"
+        tfe2.vm.provision "shell", inline: "sudo snap install ngrok"
+        tfe2.vm.post_up_message = "
             Your Terraform Enterprise machine has been successfully provisioned!
             Please browse to https://#{tfe_ip}:8800 to track the installation progress of TFE. The console password is Hashicorp1!
             Gitlab is also starting up, and will be accessible at https://10.10.0.2:8443 shortly."
