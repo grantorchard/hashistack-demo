@@ -27,34 +27,20 @@ vault_home = "/srv/vault"
 $script  = <<-SCRIPT
 echo "Installing Terraform enterprise. Go make yourself a coffee."
 curl -s https://install.terraform.io/ptfe/stable | bash -s \
-    local-address=10.10.0.2 \
-    public-address=10.10.0.2 \
+    local-address=#{tfe_ip} \
+    public-address=#{tfe_ip} \
     no-proxy \
     no-docker >> null
 SCRIPT
 
 $ready = <<-READY
-while ! curl -ksfS --connect-timeout 5 https://10.10.0.2/_health_check; do
+while ! curl -ksfS --connect-timeout 5 https://#{tfe_ip}/_health_check; do
     echo "Querying health check service..... this may take a while"
     sleep 5
 done
 echo "Your Terraform Enterprise environment is ready! Logon at https://10.10.0.2, or https://tfe.hashicorplabs.com if you have already configured your hosts file."
 READY
 
-$vault = <<-VAULT
-VAULT_VERSION="1.3.0-beta1+ent"
-curl --silent --remote-name https://releases.hashicorp.com/vault/${VAULT_VERSION}/vault_${VAULT_VERSION}_linux_amd64.zip
-curl --silent --remote-name https://releases.hashicorp.com/vault/${VAULT_VERSION}/vault_${VAULT_VERSION}_SHA256SUMS
-curl --silent --remote-name https://releases.hashicorp.com/vault/${VAULT_VERSION}/vault_${VAULT_VERSION}_SHA256SUMS.sig
-unzip vault_${VAULT_VERSION}_linux_amd64.zip
-sudo chown root:root vault
-sudo mv vault /usr/local/bin/
-vault --version
-vault -autocomplete-install
-complete -C /usr/local/bin/vault vault
-sudo setcap cap_ipc_lock=+ep /usr/local/bin/vault
-sudo useradd --system --home /etc/vault.d --shell /bin/false vault
-VAULT
 
 
 Vagrant.configure(2) do |config|
