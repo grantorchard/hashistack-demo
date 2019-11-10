@@ -154,7 +154,7 @@ Vagrant.configure(2) do |config|
             "USER" => consul_user,
             "GROUP" => consul_group,
             }        
-        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/consul/scripts/install-consul-systemd.sh | bash"   
+        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/grantorchard/hashistack-demo/master/install-consul-systemd.sh | bash"   
         vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/grantorchard/hashistack-demo/master/scripts/setup-user.sh | bash",
             env: {
                 "GROUP" => vault_group,
