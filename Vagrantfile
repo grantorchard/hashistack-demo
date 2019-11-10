@@ -55,6 +55,16 @@ done
 echo "Your Terraform Enterprise environment is ready! Logon at https://10.10.0.2, or https://tfe.hashicorplabs.com if you have already configured your hosts file."
 READY
 
+$hosts = <<-SCRIPT
+cat << EOF >> /etc/hosts
+10.10.0.2 tfe.hashicorplabs.com tfe
+10.10.0.3 tfe2.hashicorplabs.com tfe2
+10.10.0.4 vault.hashicorplabs.com vault
+10.10.0.5 vault2.hashicorplabs.com vault2
+EOF
+SCRIPT
+
+
 Vagrant.configure(2) do |config|
 
     # TFE
@@ -65,7 +75,7 @@ Vagrant.configure(2) do |config|
         end
         tfe.vm.box = "bento/ubuntu-18.04"
         tfe.vm.network "private_network", ip: tfe_ip
-        tfe.vm.hostname = "tfe1"
+        tfe.vm.hostname = "tfe"
         tfe.vm.provision "file", source: "files/.", destination: "/tmp"
         tfe.vm.provision "shell", inline: "mv /tmp/replicated.conf /etc/replicated.conf"
         tfe.vm.provision "shell", inline: "chmod 644 /etc/replicated.conf"
@@ -82,13 +92,14 @@ Vagrant.configure(2) do |config|
                                                       --env GITLAB_OMNIBUS_CONFIG=\"external_url 'https://gitlab.hashicorplabs.com'; letsencrypt['enabled'] = false\" \
                                                         gitlab/gitlab-ce:latest"
         tfe.vm.provision "shell", inline: "sudo snap install ngrok"
+        tfe.vm.provision "shell", inline: $hosts
         tfe.vm.post_up_message = "
             Your Terraform Enterprise machine has been successfully provisioned!
             Please browse to https://#{tfe_ip}:8800 to track the installation progress of TFE. The console password is Hashicorp1!
             Gitlab is also starting up, and will be accessible at https://10.10.0.2:8443 shortly."
     end
 
-    # TFE
+    # TFE2
     config.vm.define "tfe2" do |tfe2|
     tfe2.vm.provider "virtualbox" do |vb|
         vb.memory = "2048"
@@ -113,6 +124,7 @@ Vagrant.configure(2) do |config|
         #                                               --env GITLAB_OMNIBUS_CONFIG=\"external_url 'https://gitlab.hashicorplabs.com'; letsencrypt['enabled'] = false\" \
         #                                                 gitlab/gitlab-ce:latest"
         tfe2.vm.provision "shell", inline: "sudo snap install ngrok"
+        tfe2.vm.provision "shell", inline: $hosts
         tfe2.vm.post_up_message = "
             Your Terraform Enterprise machine has been successfully provisioned!
             Please browse to https://#{tfe2_ip}:8800 to track the installation progress of TFE. The console password is Hashi1!
@@ -123,12 +135,12 @@ Vagrant.configure(2) do |config|
     config.vm.define "vault" do |vault|
         vault.vm.box = "bento/ubuntu-18.04"
         vault.vm.network "private_network", ip: vault_ip
-        vault.vm.hostname = "vaultnode-01"
+        vault.vm.hostname = "vault"
         vault.vm.provision "shell", inline: "sudo apt -y install unzip"
-        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/shared/scripts/base.sh | bash"
+        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/grantorchard/hashistack-demo/master/scripts/base.sh | bash"
         vault.vm.network :forwarded_port, guest: 8200, host: vault_host_port, auto_correct: true
         vault.vm.network :forwarded_port, guest: 8500, host: consul_host_port, auto_correct: true
-        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/shared/scripts/setup-user.sh | bash",
+        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/grantorchard/hashistack-demo/master/scripts/setup-user.sh | bash",
             env: {
             "GROUP" => consul_group,
             "USER" => consul_user,
@@ -143,7 +155,7 @@ Vagrant.configure(2) do |config|
             "GROUP" => consul_group,
             }        
         vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/consul/scripts/install-consul-systemd.sh | bash"   
-        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/shared/scripts/setup-user.sh | bash",
+        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/grantorchard/hashistack-demo/master/scripts/setup-user.sh | bash",
             env: {
                 "GROUP" => vault_group,
                 "USER" => vault_user,
@@ -159,6 +171,7 @@ Vagrant.configure(2) do |config|
             }
         vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/vault/scripts/install-vault-systemd.sh | bash"
         vault.vm.provision "shell", inline: "sudo snap install ngrok"
+        vault.vm.provision "shell", inline: $hosts
         vault.vm.post_up_message = "
             Your Vault dev cluster has been successfully provisioned!
             To SSH into a Vault host, run the below command.
@@ -185,12 +198,12 @@ Vagrant.configure(2) do |config|
     config.vm.define "vault2" do |vault|
         vault.vm.box = "bento/ubuntu-18.04"
         vault.vm.network "private_network", ip: vault_ip2
-        vault.vm.hostname = "vaultnode-01"
+        vault.vm.hostname = "vault2"
         vault.vm.provision "shell", inline: "sudo apt -y install unzip"
-        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/shared/scripts/base.sh | bash"
+        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/grantorchard/hashistack-demo/master/scripts/base.sh | bash"
         vault.vm.network :forwarded_port, guest: 8200, host: vault_host_port, auto_correct: true
         vault.vm.network :forwarded_port, guest: 8500, host: consul_host_port, auto_correct: true
-        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/shared/scripts/setup-user.sh | bash",
+        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/grantorchard/hashistack-demo/master/scripts/setup-user.sh | bash",
             env: {
             "GROUP" => consul_group,
             "USER" => consul_user,
@@ -205,7 +218,7 @@ Vagrant.configure(2) do |config|
             "GROUP" => consul_group,
             }        
         vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/consul/scripts/install-consul-systemd.sh | bash"   
-        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/shared/scripts/setup-user.sh | bash",
+        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/grantorchard/hashistack-demo/master/scripts/setup-user.sh | bash",
             env: {
                 "GROUP" => vault_group,
                 "USER" => vault_user,
@@ -221,6 +234,7 @@ Vagrant.configure(2) do |config|
             }
         vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/vault/scripts/install-vault-systemd.sh | bash"
         vault.vm.provision "shell", inline: "sudo snap install ngrok"
+        vault.vm.provision "shell", inline: $hosts
         vault.vm.post_up_message = "
             Your Vault dev cluster has been successfully provisioned!
             To SSH into a Vault host, run the below command.
