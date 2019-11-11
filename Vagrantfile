@@ -18,8 +18,6 @@ consul_home = "/srv/consul"
 # Vault variables
 
 vault_ip = ENV['VAULT_IP'] || "10.10.0.4"
-vault_ip2 = ENV['VAULT_IP'] || "10.10.0.5"
-
 vault_host_port = ENV['VAULT_HOST_PORT'] || 8200
 vault_version = ENV['VAULT_VERSION'] || "1.3.0-beta1+ent"
 vault_ent_url = ENV['VAULT_ENT_URL']
@@ -193,6 +191,7 @@ Vagrant.configure(2) do |config|
               $ vagrant destroy
             "
     end
+<<<<<<< HEAD
     
     #Vault
     config.vm.define "vault2" do |vault|
@@ -256,6 +255,8 @@ Vagrant.configure(2) do |config|
               $ vagrant destroy
             "
     end
+=======
+>>>>>>> parent of 413da7f... fixed vault
 end
 
     
