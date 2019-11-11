@@ -137,39 +137,39 @@ Vagrant.configure(2) do |config|
         vault.vm.network "private_network", ip: vault_ip
         vault.vm.hostname = "vault"
         vault.vm.provision "shell", inline: "sudo apt -y install unzip"
-        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/grantorchard/hashistack-demo/master/scripts/base.sh | bash"
+        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/grantorchard/hashistack-demo/master/bootstrap/base.sh | bash"
         vault.vm.network :forwarded_port, guest: 8200, host: vault_host_port, auto_correct: true
         vault.vm.network :forwarded_port, guest: 8500, host: consul_host_port, auto_correct: true
-        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/grantorchard/hashistack-demo/master/scripts/setup-user.sh | bash",
+        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/grantorchard/hashistack-demo/master/bootstrap/setup-user.sh | bash",
             env: {
             "GROUP" => consul_group,
             "USER" => consul_user,
             "COMMENT" => consul_comment,
             "HOME" => consul_home,
             }
-        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/consul/scripts/install-consul.sh | bash",
+        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/grantorchard/hashistack-demo/master/bootstrap/install-consul.sh | bash",
             env: {
             "VERSION" => consul_version,
             "URL" => consul_ent_url,
             "USER" => consul_user,
             "GROUP" => consul_group,
             }        
-        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/grantorchard/hashistack-demo/master/install-consul-systemd.sh | bash"   
-        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/grantorchard/hashistack-demo/master/scripts/setup-user.sh | bash",
+        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/grantorchard/hashistack-demo/master/bootstrap/install-consul-systemd.sh | bash"   
+        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/grantorchard/hashistack-demo/master/bootstrap/scripts/setup-user.sh | bash",
             env: {
                 "GROUP" => vault_group,
                 "USER" => vault_user,
                 "COMMENT" => vault_comment,
                 "HOME" => vault_home,
             }
-        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/vault/scripts/install-vault.sh | bash",
+        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/grantorchard/hashistack-demo/master/bootstrap/install-vault.sh | bash",
             env: {
                 "VERSION" => vault_version,
                 "URL" => vault_ent_url,
                 "USER" => vault_user,
                 "GROUP" => vault_group,
             }
-        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/vault/scripts/install-vault-systemd.sh | bash"
+        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/grantorchard/hashistack-demo/master/bootstrap/install-vault-systemd.sh | bash"
         vault.vm.provision "shell", inline: "sudo snap install ngrok"
         vault.vm.provision "shell", inline: $hosts
         vault.vm.post_up_message = "
@@ -200,39 +200,39 @@ Vagrant.configure(2) do |config|
         vault.vm.network "private_network", ip: vault_ip2
         vault.vm.hostname = "vault2"
         vault.vm.provision "shell", inline: "sudo apt -y install unzip"
-        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/grantorchard/hashistack-demo/master/scripts/base.sh | bash"
+        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/grantorchard/hashistack-demo/master/bootstrap/scripts/base.sh | bash"
         vault.vm.network :forwarded_port, guest: 8200, host: vault_host_port, auto_correct: true
         vault.vm.network :forwarded_port, guest: 8500, host: consul_host_port, auto_correct: true
-        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/grantorchard/hashistack-demo/master/scripts/setup-user.sh | bash",
+        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/grantorchard/hashistack-demo/master/bootstrap/scripts/setup-user.sh | bash",
             env: {
             "GROUP" => consul_group,
             "USER" => consul_user,
             "COMMENT" => consul_comment,
             "HOME" => consul_home,
             }
-        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/consul/scripts/install-consul.sh | bash",
+        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/grantorchard/hashistack-demo/master/bootstrap/install-consul.sh | bash",
             env: {
             "VERSION" => consul_version,
             "URL" => consul_ent_url,
             "USER" => consul_user,
             "GROUP" => consul_group,
             }        
-        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/consul/scripts/install-consul-systemd.sh | bash"   
-        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/grantorchard/hashistack-demo/master/scripts/setup-user.sh | bash",
+        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/grantorchard/hashistack-demo/master/bootstrap/install-consul-systemd.sh | bash"   
+        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/grantorchard/hashistack-demo/master/bootstrap/scripts/setup-user.sh | bash",
             env: {
                 "GROUP" => vault_group,
                 "USER" => vault_user,
                 "COMMENT" => vault_comment,
                 "HOME" => vault_home,
             }
-        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/vault/scripts/install-vault.sh | bash",
+        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/grantorchard/hashistack-demo/master/bootstrap/install-vault.sh | bash",
             env: {
                 "VERSION" => vault_version,
                 "URL" => vault_ent_url,
                 "USER" => vault_user,
                 "GROUP" => vault_group,
             }
-        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/vault/scripts/install-vault-systemd.sh | bash"
+        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/grantorchard/hashistack-demo/master/bootstrap/install-vault-systemd.sh | bash"
         vault.vm.provision "shell", inline: "sudo snap install ngrok"
         vault.vm.provision "shell", inline: $hosts
         vault.vm.post_up_message = "
