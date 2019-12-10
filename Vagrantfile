@@ -66,7 +66,7 @@ Vagrant.configure(2) do |config|
         tfe.vm.box = "bento/ubuntu-18.04"
         tfe.vm.network "private_network", ip: tfe_ip
         tfe.vm.hostname = "tfe1"
-        tfe.vm.provision "file", source: "files/.", destination: "/tmp"
+        tfe.vm.provision "file", source: "tfe-files/.", destination: "/tmp"
         tfe.vm.provision "shell", inline: "mv /tmp/replicated.conf /etc/replicated.conf"
         tfe.vm.provision "shell", inline: "chmod 644 /etc/replicated.conf"
         tfe.vm.provision "docker"
@@ -88,77 +88,48 @@ Vagrant.configure(2) do |config|
             Gitlab is also starting up, and will be accessible at https://10.10.0.2:8443 shortly."
     end
 
-    # TFE
-    config.vm.define "tfe2" do |tfe2|
-    tfe2.vm.provider "virtualbox" do |vb|
-        vb.memory = "2048"
-        vb.cpus = "2"
-        end
-        tfe2.vm.box = "bento/ubuntu-18.04"
-        tfe2.vm.network "private_network", ip: tfe2_ip
-        tfe2.vm.hostname = "tfe2"
-        tfe2.vm.provision "file", source: "files/.", destination: "/tmp"
-        tfe2.vm.provision "shell", inline: "mv /tmp/replicated.conf /etc/replicated.conf"
-        tfe2.vm.provision "shell", inline: "chmod 644 /etc/replicated.conf"
-        tfe2.vm.provision "docker"
-        tfe2.vm.provision "shell", inline: $scripttfe2
-        # tfe2.vm.provision "shell", inline: "docker run --detach \
-        #                                               --hostname gitlab.example.com \
-        #                                               --publish 8443:443 --publish 8080:80 --publish 8222:22 \
-        #                                               --name gitlab \
-        #                                               --restart always \
-        #                                               --volume /srv/gitlab/config:/etc/gitlab \
-        #                                               --volume /srv/gitlab/logs:/var/log/gitlab \
-        #                                               --volume /srv/gitlab/data:/var/opt/gitlab \
-        #                                               --env GITLAB_OMNIBUS_CONFIG=\"external_url 'https://gitlab.hashicorplabs.com'; letsencrypt['enabled'] = false\" \
-        #                                                 gitlab/gitlab-ce:latest"
-        tfe2.vm.provision "shell", inline: "sudo snap install ngrok"
-        tfe2.vm.post_up_message = "
-            Your Terraform Enterprise machine has been successfully provisioned!
-            Please browse to https://#{tfe2_ip}:8800 to track the installation progress of TFE. The console password is Hashi1!
-            Gitlab is also starting up, and will be accessible at https://#{tfe_ip}:8443 shortly."
-    end
-
     #Vault
     config.vm.define "vault" do |vault|
         vault.vm.box = "bento/ubuntu-18.04"
         vault.vm.network "private_network", ip: vault_ip
         vault.vm.hostname = "vaultnode-01"
+        vault.vm.provision "file", source: "vault-files/.", destination: "/tmp"
         vault.vm.provision "shell", inline: "sudo apt -y install unzip"
-        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/shared/scripts/base.sh | bash"
+        vault.vm.provision "shell", inline: "bash /tmp/base.sh"
         vault.vm.network :forwarded_port, guest: 8200, host: vault_host_port, auto_correct: true
         vault.vm.network :forwarded_port, guest: 8500, host: consul_host_port, auto_correct: true
-        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/shared/scripts/setup-user.sh | bash",
+        vault.vm.provision "shell", inline: "bash /tmp/setup-user.sh ",
             env: {
             "GROUP" => consul_group,
             "USER" => consul_user,
             "COMMENT" => consul_comment,
             "HOME" => consul_home,
             }
-        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/consul/scripts/install-consul.sh | bash",
+        vault.vm.provision "shell", inline: "bash /tmp/install-consul.sh ",
             env: {
             "VERSION" => consul_version,
             "URL" => consul_ent_url,
             "USER" => consul_user,
             "GROUP" => consul_group,
             }        
-        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/consul/scripts/install-consul-systemd.sh | bash"   
-        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/shared/scripts/setup-user.sh | bash",
+        vault.vm.provision "shell", inline: "bash /tmp/install-consul-systemd.sh"   
+        vault.vm.provision "shell", inline: "bash /tmp/setup-user.sh",
             env: {
                 "GROUP" => vault_group,
                 "USER" => vault_user,
                 "COMMENT" => vault_comment,
                 "HOME" => vault_home,
             }
-        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/vault/scripts/install-vault.sh | bash",
+        vault.vm.provision "shell", inline: "bash /tmp/install-vault.sh",
             env: {
                 "VERSION" => vault_version,
                 "URL" => vault_ent_url,
                 "USER" => vault_user,
                 "GROUP" => vault_group,
             }
-        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/vault/scripts/install-vault-systemd.sh | bash"
+        vault.vm.provision "shell", inline: "bash /tmp/install-vault-systemd.sh"
         vault.vm.provision "shell", inline: "sudo snap install ngrok"
+        vault.vm.provision "shell", inline: "cat /tmp/output.txt"
         vault.vm.post_up_message = "
             Your Vault dev cluster has been successfully provisioned!
             To SSH into a Vault host, run the below command.
@@ -185,42 +156,43 @@ Vagrant.configure(2) do |config|
     config.vm.define "vault2" do |vault|
         vault.vm.box = "bento/ubuntu-18.04"
         vault.vm.network "private_network", ip: vault_ip2
-        vault.vm.hostname = "vaultnode-01"
+        vault.vm.provision "file", source: "vault-files/.", destination: "/tmp"
         vault.vm.provision "shell", inline: "sudo apt -y install unzip"
-        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/shared/scripts/base.sh | bash"
+        vault.vm.provision "shell", inline: "bash /tmp/base.sh"
         vault.vm.network :forwarded_port, guest: 8200, host: vault_host_port, auto_correct: true
         vault.vm.network :forwarded_port, guest: 8500, host: consul_host_port, auto_correct: true
-        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/shared/scripts/setup-user.sh | bash",
+        vault.vm.provision "shell", inline: "bash /tmp/setup-user.sh ",
             env: {
             "GROUP" => consul_group,
             "USER" => consul_user,
             "COMMENT" => consul_comment,
             "HOME" => consul_home,
             }
-        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/consul/scripts/install-consul.sh | bash",
+        vault.vm.provision "shell", inline: "bash /tmp/install-consul.sh ",
             env: {
             "VERSION" => consul_version,
             "URL" => consul_ent_url,
             "USER" => consul_user,
             "GROUP" => consul_group,
             }        
-        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/consul/scripts/install-consul-systemd.sh | bash"   
-        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/shared/scripts/setup-user.sh | bash",
+        vault.vm.provision "shell", inline: "bash /tmp/install-consul-systemd.sh"   
+        vault.vm.provision "shell", inline: "bash /tmp/setup-user.sh",
             env: {
                 "GROUP" => vault_group,
                 "USER" => vault_user,
                 "COMMENT" => vault_comment,
                 "HOME" => vault_home,
             }
-        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/vault/scripts/install-vault.sh | bash",
+        vault.vm.provision "shell", inline: "bash /tmp/install-vault.sh",
             env: {
                 "VERSION" => vault_version,
                 "URL" => vault_ent_url,
                 "USER" => vault_user,
                 "GROUP" => vault_group,
             }
-        vault.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/vault/scripts/install-vault-systemd.sh | bash"
+        vault.vm.provision "shell", inline: "bash /tmp/install-vault-systemd.sh"
         vault.vm.provision "shell", inline: "sudo snap install ngrok"
+        vault.vm.provision "shell", inline: "cat /tmp/output.txt"
         vault.vm.post_up_message = "
             Your Vault dev cluster has been successfully provisioned!
             To SSH into a Vault host, run the below command.
@@ -237,7 +209,7 @@ Vagrant.configure(2) do |config|
               # Use the API to write and read a generic secret
               $ curl -H \"X-Vault-Token: $VAULT_TOKEN\" -X POST -d '{\"data\": {\"bar\":\"baz\"}}' http://127.0.0.1:8200/v1/secret/data/api | jq '.'
               $ curl -H \"X-Vault-Token: $VAULT_TOKEN\" http://127.0.0.1:8200/v1/secret/data/api | jq '.'
-            Visit the Vault UI: http://#{vault_ip2}:#{vault_host_port}
+            Visit the Vault UI: http://#{vault_ip}:#{vault_host_port}
             Don't forget to tear your VM down after.
               $ vagrant destroy
             "
