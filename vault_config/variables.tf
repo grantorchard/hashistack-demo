@@ -21,3 +21,7 @@ variable vault_entity_password {
     default = "Hashi1!"
     description = "Used for setting up the entity alias with the userpass backend. This password will be captured in the state file so do not use a real password."
 }
+
+variable gcp_credentials_json {
+    type = "string"
+}

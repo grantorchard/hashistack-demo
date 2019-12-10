@@ -60,3 +60,9 @@ resource vault_identity_entity_alias "userpass" {
     canonical_id = vault_identity_entity.me.id
     mount_accessor = vault_auth_backend.userpass.accessor
 }
+
+# Create GCP Backend.
+
+resource vault_gcp_auth_backend "gcp" {
+    credentials  = "${file(var.gcp_credentials_json)}"
+}
