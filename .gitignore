@@ -6,3 +6,4 @@ files/license.rli
 custom_cert/.terraform
 packer
 .terraform
+.DS_Store
