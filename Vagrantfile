@@ -184,7 +184,7 @@ Vagrant.configure(2) do |config|
             }
         vault.vm.provision "shell", inline: "bash /tmp/install-vault-systemd.sh"
         vault.vm.provision "shell", inline: "sudo snap install ngrok"
-        vault.vm.provision "shell", inline: "cat /tmp/output.txt"
+        vault.vm.provision "shell", inline: "bash /tmp/vault-init.sh"
         vault.vm.post_up_message = "
             Your Vault dev cluster has been successfully provisioned!
             To SSH into a Vault host, run the below command.
@@ -193,14 +193,6 @@ Vagrant.configure(2) do |config|
             or API (https://www.vaultproject.io/api/index.html) commands.
               # The Root token for your Vault -dev instance is set to `root` and placed in /srv/vault/.vault-token,
               # the `VAULT_TOKEN` environment variable has already been set for you
-              $ echo $VAULT_TOKEN
-              $ sudo cat /srv/vault/.vault-token
-              # Use the CLI to write and read a generic secret
-              $ vault kv put secret/cli foo=bar
-              $ vault kv get secret/cli
-              # Use the API to write and read a generic secret
-              $ curl -H \"X-Vault-Token: $VAULT_TOKEN\" -X POST -d '{\"data\": {\"bar\":\"baz\"}}' http://127.0.0.1:8200/v1/secret/data/api | jq '.'
-              $ curl -H \"X-Vault-Token: $VAULT_TOKEN\" http://127.0.0.1:8200/v1/secret/data/api | jq '.'
             Visit the Vault UI: http://#{vault_ip}:#{vault_host_port}
             Don't forget to tear your VM down after.
               $ vagrant destroy
