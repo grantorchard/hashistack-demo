@@ -32,7 +32,8 @@ sudo cp /tmp/vault.conf /etc/vault.d/
 # FLAGS=-dev -dev-ha -dev-transactional -dev-root-token-id=root -dev-listen-address=0.0.0.0:8200
 # ENVVARS
 echo "Initialising your Vault ${VAULT_VERSION} node"
-vault operator init >> /tmp/output.txt
+vault operator init --format json | jq '.' | cat > ~/vaultkeys
+cp ~/vaultkeys /tmp/vaultkeys
 
 echo "Update directory permissions"
 sudo chown -R ${USER}:${GROUP} ${VAULT_CONFIG_DIR} ${VAULT_DATA_DIR} ${VAULT_TLS_DIR}
