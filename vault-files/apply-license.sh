@@ -12,6 +12,7 @@ JSON_STRING=$( jq -n \
 curl \
     --header "X-Vault-Token: $VAULT_TOKEN" \
     --request POST \
-    --data $JSON_STRING \
+    -H "Content-Type: application/json" \
+    -d '{"text":"'$VAULT_LICENSE'"}' \
     http://127.0.0.1:8200/v1/sys/license
 

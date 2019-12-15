@@ -16,3 +16,14 @@ do
 done
 
 export VAULT_TOKEN=$(cat ~/vaultkeys | jq -r '.root_token')
+
+echo "Applying Vault license"
+
+VAULT_LICENSE=$(<vault1.license)
+
+curl \
+    --header "X-Vault-Token: $VAULT_TOKEN" \
+    --request POST \
+    -H "Content-Type: application/json" \
+    -d '{"text":"'$VAULT_LICENSE'"}' \
+    http://127.0.0.1:8200/v1/sys/license
