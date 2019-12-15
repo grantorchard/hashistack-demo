@@ -130,7 +130,6 @@ Vagrant.configure(2) do |config|
         vault.vm.provision "shell", inline: "bash /tmp/install-vault-systemd.sh"
         vault.vm.provision "shell", inline: "sudo snap install ngrok"
         vault.vm.provision "shell", inline: "bash /tmp/vault-init.sh"
-        vault.vm.provision "shell", inline: "bash /tmp/apply-license.sh"
         vault.vm.post_up_message = "
             Your Vault dev cluster has been successfully provisioned!
             To SSH into a Vault host, run the below command.
