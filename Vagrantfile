@@ -145,7 +145,7 @@ Vagrant.configure(2) do |config|
     end
     
     #Vault
-    config.vm.define "vault2" do |vault|
+    config.vm.define "vault-dr" do |vault|
         vault.vm.box = "bento/ubuntu-18.04"
         vault.vm.network "private_network", ip: vault_ip2
         vault.vm.provision "file", source: "vault-files/.", destination: "/tmp"
@@ -184,6 +184,7 @@ Vagrant.configure(2) do |config|
             }
         vault.vm.provision "shell", inline: "bash /tmp/install-vault-systemd.sh"
         vault.vm.provision "shell", inline: "sudo snap install ngrok"
+        vault.vm.provision "shell", inline: "sudo rm /tmp/vault1.license"
         vault.vm.provision "shell", inline: "bash /tmp/vault-init.sh"
         vault.vm.post_up_message = "
             Your Vault dev cluster has been successfully provisioned!
@@ -193,7 +194,7 @@ Vagrant.configure(2) do |config|
             or API (https://www.vaultproject.io/api/index.html) commands.
               # The Root token for your Vault -dev instance is set to `root` and placed in /srv/vault/.vault-token,
               # the `VAULT_TOKEN` environment variable has already been set for you
-            Visit the Vault UI: http://#{vault_ip}:#{vault_host_port}
+            Visit the Vault UI: http://#{vault_ip2}:#{vault_host_port}
             Don't forget to tear your VM down after.
               $ vagrant destroy
             "
