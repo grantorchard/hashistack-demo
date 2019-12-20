@@ -130,8 +130,9 @@ Vagrant.configure(2) do |config|
         vault.vm.provision "shell", inline: "bash /tmp/install-vault-systemd.sh"
         vault.vm.provision "shell", inline: "sudo snap install ngrok"
         vault.vm.provision "shell", inline: "bash /tmp/vault-init.sh"
+        vault.vm.provision "shell", inline: "bash /tmp/custom-plugin.sh"
         vault.vm.post_up_message = "
-            Your Vault dev cluster has been successfully provisioned!
+            Your Vault cluster has been successfully provisioned!
             To SSH into a Vault host, run the below command.
               $ vagrant ssh
             You can interact with Vault using any of the CLI (https://www.vaultproject.io/docs/commands/index.html)
@@ -142,6 +143,7 @@ Vagrant.configure(2) do |config|
             Don't forget to tear your VM down after.
               $ vagrant destroy
             "
+        vault.vm.provision "shell", inline: "echo $VAULT_TOKEN "
     end
     
     #Vault
@@ -186,8 +188,9 @@ Vagrant.configure(2) do |config|
         vault.vm.provision "shell", inline: "sudo snap install ngrok"
         vault.vm.provision "shell", inline: "sudo rm /tmp/vault1.license"
         vault.vm.provision "shell", inline: "bash /tmp/vault-init.sh"
+        vault.vm.provision "shell", inline: "bash /tmp/custom-plugin.sh"
         vault.vm.post_up_message = "
-            Your Vault dev cluster has been successfully provisioned!
+            Your Vault cluster has been successfully provisioned!
             To SSH into a Vault host, run the below command.
               $ vagrant ssh
             You can interact with Vault using any of the CLI (https://www.vaultproject.io/docs/commands/index.html)
@@ -196,8 +199,8 @@ Vagrant.configure(2) do |config|
               # the `VAULT_TOKEN` environment variable has already been set for you
             Visit the Vault UI: http://#{vault_ip2}:#{vault_host_port}
             Don't forget to tear your VM down after.
-              $ vagrant destroy
-            "
+              $ vagrant destroy"
+        vault.vm.provision "shell", inline: "echo $VAULT_TOKEN "
     end
 end
 

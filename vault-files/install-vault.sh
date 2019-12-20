@@ -42,8 +42,11 @@ sudo chmod -R 0644 ${VAULT_CONFIG_DIR}/*
 echo "Set Vault profile script"
 sudo tee ${VAULT_PROFILE_SCRIPT} > /dev/null <<PROFILE
 export VAULT_ADDR=http://127.0.0.1:8200
-export VAULT_TOKEN=root
 PROFILE
+
+echo "Creating Vault Pugin Directory"
+
+sudo mkdir ${VAULT_CONFIG_DIR}/plugin
 
 echo "Granting mlock syscall to vault binary"
 sudo setcap cap_ipc_lock=+ep ${VAULT_PATH}

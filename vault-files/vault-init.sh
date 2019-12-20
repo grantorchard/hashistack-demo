@@ -14,14 +14,20 @@ vault operator init -key-shares=$VAULT_KEYSHARES -key-threshold=$VAULT_KEYTHRESH
 
 for i in $( seq 0 $VAULT_KEYTHRESHOLDS )
 do
-       vault operator unseal $(cat ~/vaultkeys | jq -r '.unseal_keys_b64'[$i])
+       vault operator unseal $(sudo cat /root/vaultkeys | jq -r '.unseal_keys_b64'[$i])
 done
 
 sudo cp /root/vaultkeys ~/
 sudo cp /root/vaultkeys /tmp/
 
-export VAULT_TOKEN=$(cat ~/vaultkeys | jq -r '.root_token')
 
+export VAULT_TOKEN=$(sudo cat /root/vaultkeys | jq -r '.root_token')
+echo "Adding root token to startup profile"
+
+echo "Set Vault profile script"
+sudo 
+
+sudo bash -c 'echo '$VAULT_TOKEN') >> ${VAULT_PROFILE_SCRIPT}'
 
 echo "Checking if Vault license exists"
 
