@@ -9,7 +9,7 @@ PLUGIN_URI=https://github.com/sethvargo/vault-secrets-gen/releases/download/v0.0
 echo "Downloading and preparing custom Vault plugin to cluster"
 # Download, unzip, move, and ready
 sudo curl -LO $PLUGIN_URI
-unzip vault-secrets-gen__linux_amd64.zip
+unzip vault-secrets-gen__linux_amd64.zip -d /tmp
 sudo mkdir /etc/vault.d/plugins/
 sudo mv /tmp/vault-secrets-gen /etc/vault.d/plugins/
 # get SHA256 value
@@ -23,8 +23,9 @@ vault write sys/plugins/catalog/secret/secrets-gen \
 echo "Enabling plugin"
 vault secrets enable \
     -path="gen" \
-    -plugin-name="vault-secrets-gen" \
+    -plugin-name="secrets-gen" \
     plugin
-## Test
+
 vault write gen/password length=36 symbols=5
+
 vault write gen/passphrase words=5
