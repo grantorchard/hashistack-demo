@@ -25,7 +25,3 @@ vault secrets enable \
     -path="gen" \
     -plugin-name="secrets-gen" \
     plugin
-
-vault write gen/password length=36 symbols=5
-
-vault write gen/passphrase words=5
