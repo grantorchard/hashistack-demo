@@ -5,6 +5,10 @@
 tfe_ip = ENV['TFE_IP'] || "10.10.0.2"
 tfe2_ip = ENV['TFE_IP'] || "10.10.0.3"
 
+# Linux box variables
+linux_ip = ENV['VAULT_IP'] || "10.10.0.6"
+
+
 
 # Consul variables
 consul_host_port = ENV['CONSUL_HOST_PORT'] || 8500
@@ -201,6 +205,18 @@ Vagrant.configure(2) do |config|
             Don't forget to tear your VM down after.
               $ vagrant destroy"
         vault.vm.provision "shell", inline: "echo $VAULT_TOKEN "
+    end
+
+    config.vm.define "linux" do |linux|
+        linux.vm.box = "gorchard/ubuntu-18.04-kind"
+        linux.vm.box_version = "1.13"
+        linux.vm.network "private_network", ip: linux_ip
+        linux.vm.provision "shell", inline: "export MYSQL_ROOT_PASSWORD=Hashi1!Hashi1!"
+        linux.vm.provision "shell", inline: "export MYSQL_USER=mysql!"
+        linux.vm.provision "shell", inline: "export MYSQL_PASSWORD=Hashi1!Hashi1!"
+        linux.vm.provision "shell", inline: "export MYSQL_DATABASE=hashistack"
+        linux.vm.provision "shell", inline: "docker pull mysql:5.7.29"
+        linux.vm.provision "shell", inline: "sudo docker run -p 3306:3306 --detach --env MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD} --env MYSQL_USER=${MYSQL_USER} --env MYSQL_PASSWORD=${MYSQL_PASSWORD} --env MYSQL_DATABASE=${MYSQL_DATABASE} --name mysql -d mysql:5.7.29"
     end
 end
 
